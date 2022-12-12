@@ -22,14 +22,16 @@ Auth::routes([
     'register' => false,
 ]);
 
-Route::get('dashboard', App\Http\Livewire\DashboardAdministrator::class)
-    ->name('home');
+Route::middleware(['auth'])->group(function () {
+    Route::get('dashboard', App\Http\Livewire\DashboardAdministrator::class)
+        ->name('home');
 
-Route::get('item', App\Http\Livewire\ItemAdministrator::class)
-    ->name('item');
+    Route::get('item', App\Http\Livewire\ItemAdministrator::class)
+        ->name('item');
 
-Route::get('pengelolaan', App\Http\Livewire\PengelolaanAdministrator::class)
-    ->name('pengelolaan');
+    Route::get('pengelolaan', App\Http\Livewire\PengelolaanAdministrator::class)
+        ->name('pengelolaan');
 
-Route::get('report', App\Http\Livewire\ReportAdministrator::class)
-    ->name('report');
+    Route::get('report', App\Http\Livewire\ReportAdministrator::class)
+        ->name('report');
+});

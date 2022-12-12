@@ -10,11 +10,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}" defer></script>
-    <script src="{{ asset('js/jquery.min.js') }}" defer></script>
-    <link href="{{ asset('fontawesome/js/all.js') }}" rel="stylesheet">
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -22,13 +17,14 @@
     <!-- Styles -->
     <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ asset('fontawesome/css/all.css') }}" rel="stylesheet">
+    @livewireStyles
 </head>
 
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand fw-bold" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -108,6 +104,12 @@
             @yield('content')
         </main>
     </div>
+    <!-- Scripts -->
+    @livewireScripts
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}" defer></script>
+    <script src="{{ asset('js/jquery.min.js') }}" defer></script>
+    <script src="{{ asset('fontawesome/js/all.js') }}"></script>
+    @stack('js')
 </body>
 
 </html>
