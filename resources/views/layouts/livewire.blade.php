@@ -15,8 +15,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
-    <link href="{{ asset('fontawesome/css/all.css') }}" rel="stylesheet">
+    <link href="{{ url('css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ url('fontawesome/css/all.css') }}" rel="stylesheet">
     @livewireStyles
 </head>
 
@@ -83,19 +83,19 @@
                 <div class="col-12">
                     <ul class="nav nav-tabs nav-fill">
                         <li class="nav-item">
-                            <a class="nav-link{{ Request::is('dashboard*') ? ' active' : null }}"
+                            <a class="nav-link{{ Request::is('dashboard*') ? ' active fw-bold' : ' text-dark' }}"
                                 href="{{ route('home') }}">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{{ Request::is('item*') ? ' active' : null }}"
+                            <a class="nav-link{{ Request::is('item*') ? ' active fw-bold' : ' text-dark' }}"
                                 href="{{ route('item') }}">Item</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{{ Request::is('pengelolaan*') ? ' active' : null }}"
+                            <a class="nav-link{{ Request::is('pengelolaan*') ? ' active fw-bold' : ' text-dark' }}"
                                 href="{{ route('pengelolaan') }}">Pengelolaan</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link{{ Request::is('report*') ? ' active' : null }}"
+                            <a class="nav-link{{ Request::is('report*') ? ' active fw-bold' : ' text-dark' }}"
                                 href="{{ route('report') }}">Laporan</a>
                         </li>
                     </ul>
@@ -104,11 +104,12 @@
             @yield('content')
         </main>
     </div>
-    <!-- Scripts -->
+
     @livewireScripts
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}" defer></script>
-    <script src="{{ asset('js/jquery.min.js') }}" defer></script>
-    <script src="{{ asset('fontawesome/js/all.js') }}"></script>
+    <script src="{{ url('fontawesome/js/all.js') }}"></script>
+    <script src="{{ url('js/jquery.min.js') }}"></script>
+    <script src="{{ url('js/bootstrap.bundle.min.js') }}"></script>
+    @yield('customjs')
     @stack('js')
 </body>
 
