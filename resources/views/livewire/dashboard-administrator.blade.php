@@ -1,4 +1,7 @@
 <div>
+    @push('blade')
+        @include('layouts.usernav')
+    @endpush
     <div class="row mb-0 mb-md-3">
         <div class="col-12">
             <label for="year" class="fw-bold mb-0 mb-md-2">Tahun Data</label>

@@ -15,6 +15,10 @@ class CreatePengelolaansTable extends Migration
     {
         Schema::create('pengelolaans', function (Blueprint $table) {
             $table->id();
+            $table->string('id_pengelolaan');
+            $table->integer('id_item');
+            $table->integer('id_tipe_pengelolaan');
+            $table->integer('jumlah');
             $table->timestamps();
         });
     }

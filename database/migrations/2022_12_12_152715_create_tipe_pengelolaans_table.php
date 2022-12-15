@@ -15,6 +15,8 @@ class CreateTipePengelolaansTable extends Migration
     {
         Schema::create('tipe_pengelolaans', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
+            $table->string('tipe');
             $table->timestamps();
         });
     }

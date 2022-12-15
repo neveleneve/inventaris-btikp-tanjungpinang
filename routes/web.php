@@ -29,6 +29,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('item', App\Http\Livewire\ItemAdministrator::class)
         ->name('item');
 
+    Route::get('item/{id}', App\Http\Livewire\ItemViewAdministrator::class)
+        ->name('itemview');
+
     Route::get('pengelolaan', App\Http\Livewire\PengelolaanAdministrator::class)
         ->name('pengelolaan');
 

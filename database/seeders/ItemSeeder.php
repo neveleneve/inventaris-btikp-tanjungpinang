@@ -17,7 +17,8 @@ class ItemSeeder extends Seeder
         Item::insert([
             'id_jenis_item' => 3,
             'nama' => 'Kotak CPU',
-            'jumlah' => 0,
+            'satuan' => 'Unit',
+            'jumlah' => 2,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);

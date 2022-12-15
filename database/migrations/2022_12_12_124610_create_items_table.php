@@ -17,6 +17,7 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->integer('id_jenis_item');
             $table->string('nama');
+            $table->string('satuan');
             $table->integer('jumlah');
             $table->timestamps();
         });

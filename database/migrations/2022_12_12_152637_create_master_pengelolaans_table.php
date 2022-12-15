@@ -15,6 +15,8 @@ class CreateMasterPengelolaansTable extends Migration
     {
         Schema::create('master_pengelolaans', function (Blueprint $table) {
             $table->id();
+            $table->string('id_pengelolaan');
+            $table->string('nama_penanggung_jawab');
             $table->timestamps();
         });
     }

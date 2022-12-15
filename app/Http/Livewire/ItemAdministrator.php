@@ -4,31 +4,42 @@ namespace App\Http\Livewire;
 
 use App\Models\Item;
 use App\Models\JenisItem;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ItemAdministrator extends Component
 {
+
+    use WithPagination;
+
     public $pencarian;
 
     public $inputdata = [
         'nama' => '',
+        'satuan' => '',
         'id_jenis_item' => ''
     ];
 
-    public $viewdata = [
-        'id' => null,
-        'id_jenis_item' => '',
+    public $deletedata = [
+        'id' => '',
         'nama' => '',
-        'jumlah' => '',
-        'pengelolaan' => []
     ];
 
     public $customMessages = [
         'required' => 'Bagian :attribute harus diisi!',
         'integer' => 'Bagian :attribute harus diisi dengan angka atau digit!'
     ];
+
+    public function setPage($url)
+    {
+        $this->currentPage = explode('page=', $url)[1];
+        Paginator::currentPageResolver(function () {
+            return $this->currentPage;
+        });
+    }
 
     public function render()
     {
@@ -39,7 +50,8 @@ class ItemAdministrator extends Component
                     'items.*',
                     'jenis_items.nama as jenis'
                 ])
-                ->get();
+                ->orderBy('items.created_at')
+                ->paginate(10);
         } else {
             $data = DB::table('items')
                 ->join('jenis_items', 'items.id_jenis_item', '=', 'jenis_items.id')
@@ -48,7 +60,8 @@ class ItemAdministrator extends Component
                     'jenis_items.nama as jenis'
                 ])
                 ->where('items.nama', 'LIKE', '%' . $this->pencarian . '%')
-                ->get();
+                ->orderBy('items.created_at')
+                ->paginate(10);
         }
         $jenisitem = JenisItem::get();
         return view('livewire.item-administrator', [
@@ -63,50 +76,79 @@ class ItemAdministrator extends Component
             $this->inputdata,
             [
                 'nama'   => 'required',
+                'satuan'   => 'required',
                 'id_jenis_item'   => 'required',
             ],
             $this->customMessages
         );
 
         if ($validasi->fails()) {
-            session()->flash('message', 'Data gagal ditambah. Silahkan ulangi!');
-            session()->flash('color', 'danger');
-            $this->emit('alertremove');
+            $this->alert('Data gagal ditambah. Silahkan ulangi!', 'danger', 1, 'alertremove');
         } else {
             Item::insert([
                 'id_jenis_item' => $this->inputdata['id_jenis_item'],
                 'nama'   => $this->inputdata['nama'],
+                'satuan' => $this->inputdata['satuan'],
                 'jumlah' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
             $this->cleartext();
-            session()->flash('message', 'Data berhasil ditambah.');
-            session()->flash('color', 'success');
-            $this->emit('alertremove');
+            $this->alert('Data berhasil ditambah.', 'success', 1, 'alertremove');
+        }
+    }
+
+    public function alert($message, $color, $alertpage = [0, 1], $idname = '')
+    {
+        session()->flash('message', $message);
+        session()->flash('color', $color);
+        if ($alertpage == 1) {
+            $this->emit($idname);
         }
     }
 
     public function cleartext()
     {
-        $this->inputdata['nama'] = '';
+        $this->inputdata = [
+            'nama' => '',
+            'satuan' => '',
+            'id_jenis_item' => ''
+        ];
+
         $this->viewdata = [
             'id' => null,
+            'id_jenis_item' => '',
             'nama' => '',
+            'satuan' => '',
+            'jumlah' => ''
+        ];
+
+        $this->pengelolaan = [
+            'id_pengelolaan' => '',
+            'tipe' => '',
             'jumlah' => '',
-            'pengelolaan' => []
+        ];
+
+        $this->deletedata = [
+            'id' => '',
+            'nama' => '',
         ];
     }
 
     public function viewitem($id)
     {
+        $this->cleartext();
         $item = Item::where('id', $id)->get();
-        $this->viewdata = [
+        $this->deletedata = [
             'id' => $id,
-            'id_jenis_item' => $item[0]['id_jenis_item'],
             'nama' => $item[0]['nama'],
-            'jumlah' => $item[0]['jumlah'],
-            'pengelolaan' => []
         ];
+    }
+
+    public function delete($id)
+    {
+        Item::where('id', $id)->delete();
+        $this->cleartext();
+        $this->alert('Data berhasil dihapus.', 'success', 1, 'alertremove');
     }
 }

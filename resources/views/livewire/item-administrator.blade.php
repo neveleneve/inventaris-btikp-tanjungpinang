@@ -1,4 +1,7 @@
 <div>
+    @push('blade')
+        @include('layouts.usernav')
+    @endpush
     <div class="row justify-content-center">
         @if (session()->has('message'))
             <div class="col-12 mb-3">
@@ -20,12 +23,13 @@
         </div>
         <div class="col-12 mb-3">
             <div class="table-responsive">
-                <table class="table table-bordered text-center">
+                <table class="table table-bordered text-center text-nowrap">
                     <thead class="table-primary">
                         <tr>
                             <th>No</th>
                             <th>Nama Item</th>
                             <th>Jenis Item</th>
+                            <th>Satuan</th>
                             <th>Jumlah Item</th>
                             <th>Aksi</th>
                         </tr>
@@ -36,17 +40,21 @@
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>{{ $item->nama }}</td>
                                 <td>{{ $item->jenis }}</td>
+                                <td>{{ $item->satuan }}</td>
                                 <td>{{ $item->jumlah }}</td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#viewitem" wire:click='viewitem({{ $item->id }})'>
+                                    <a class="btn btn-warning btn-sm"
+                                        href="{{ route('itemview', ['id' => $item->id]) }}">
                                         <i class="fa fa-eye d-inline d-md-none"></i>
                                         <span class="fw-bold d-none d-md-inline">Lihat</span>
-                                    </button>
-                                    <button class="btn btn-danger btn-sm">
-                                        <i class="fa fa-trash d-inline d-md-none"></i>
-                                        <span class="fw-bold d-none d-md-inline">Hapus</span>
-                                    </button>
+                                    </a>
+                                    @if ($item->jumlah == 0)
+                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#deleteitem" wire:click='viewitem({{ $item->id }})'>
+                                            <i class="fa fa-trash d-inline d-md-none"></i>
+                                            <span class="fw-bold d-none d-md-inline">Hapus</span>
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
@@ -60,7 +68,11 @@
                 </table>
             </div>
         </div>
-        {{ $inputdata['nama'] }}
+        <div class="row justify-content-center">
+            <div class="col-12">
+                {{ $items->links('layouts.pagination') }}
+            </div>
+        </div>
     </div>
     {{-- Modal Tambah Data --}}
     <div wire:ignore.self class="modal fade" id="additem" tabindex="-1" data-bs-backdrop="static">
@@ -68,7 +80,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 fw-bold" id="exampleModalToggleLabel2">Tambah Data Item</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"wire:click='cleartext'></button>
                 </div>
                 <form wire:submit.prevent='store'>
                     <div class="modal-body">
@@ -76,12 +89,17 @@
                             <div class="col-12 mb-3">
                                 <label class="fw-bold" for="nama">Nama Item</label>
                                 <input class="form-control" type="text" name="nama" id="nama"
-                                    wire:model.lazy='inputdata.nama' placeholder="Nama Item">
+                                    wire:model='inputdata.nama' placeholder="Nama Item">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label class="fw-bold" for="satuan">Nama Satuan Item</label>
+                                <input class="form-control" type="text" name="satuan" id="satuan"
+                                    wire:model='inputdata.satuan' placeholder="Nama Satuan Item">
                             </div>
                             <div class="col-12 mb-3">
                                 <label class="fw-bold" for="jenis">Jenis Item</label>
-                                <select name="jenis" id="jenis" class="form-control"
-                                    wire:model.lazy='inputdata.id_jenis_item'>
+                                <select name="jenis" id="jenis" class="form-select"
+                                    wire:model='inputdata.id_jenis_item'>
                                     <option selected hidden>Pilih Jenis Item</option>
                                     @foreach ($jenisitems as $item)
                                         <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -102,66 +120,30 @@
             </div>
         </div>
     </div>
-    {{-- Modal View Data dan Pengelolaan --}}
-    <div wire:ignore.self class="modal fade" id="viewitem" tabindex="-1" data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+    {{-- Modal Konfirmasi Hapus Item --}}
+    <div wire:ignore.self class="modal fade" id="deleteitem" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5 fw-bold" id="exampleModalToggleLabel2">View Data Item</h1>
+                    <h1 class="modal-title fs-5 fw-bold" id="exampleModalToggleLabel2">Hapus Item</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form wire:submit.prevent='store'>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <label class="fw-bold" for="nama">Nama Item</label>
-                                <input class="form-control" type="text" name="nama" id="nama"
-                                    wire:model='viewdata.nama'>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <label class="fw-bold" for="jumlah">Jumlah Item</label>
-                                <input readonly class="form-control" type="number" name="jumlah" id="jumlah"
-                                    wire:model='viewdata.jumlah'>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <label class="fw-bold" for="jenis">Jenis Item</label>
-                                <select name="jenis" id="jenis" class="form-control"
-                                    wire:model.lazy='viewdata.id_jenis_item'>
-                                    <option selected hidden>Pilih Jenis Item</option>
-                                    @foreach ($jenisitems as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <table class="table table-bordered text-center">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>No</th>
-                                            <th>ID Pengelolaan</th>
-                                            <th>Jenis Pengelolaan</th>
-                                            <th>Jumlah</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" wire:click='cleartext' class="btn btn-danger"
-                            data-bs-dismiss="modal">
-                            Batal
-                        </button>
-                        <button type="submit" wire:click='cleartext' class="btn btn-primary"
-                            data-bs-dismiss="modal">
-                            Ubah
-                        </button>
-                    </div>
-                </form>
+                <div class="modal-body">
+                    <p>Hapus data {{ $deletedata['nama'] }}?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" wire:click='cleartext' class="btn btn-danger" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        wire:click='delete({{ $deletedata['id'] }}); cleartext'>
+                        Hapus
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-    {{-- Modal Konfirmasi Hapus Item --}}
+    {{-- additional script --}}
     @push('js')
         <script>
             $(document).ready(function() {
