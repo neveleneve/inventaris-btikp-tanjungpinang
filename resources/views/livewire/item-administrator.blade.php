@@ -12,7 +12,7 @@
         @endif
         <div class="col-12 col-md-6 d-grid gap-2 mb-3">
             <input type="text" class="form-control" name="search" id="search" placeholder="Pencarian..."
-                wire:model='pencarian'>
+                wire:model='pencarian' title="Pencarian Data">
         </div>
         <div class="col-12 col-md-6 d-grid gap-2 mb-3">
             <button title="Tambah Data Item" class="btn btn-primary fw-bold" data-bs-toggle="modal"
@@ -43,14 +43,15 @@
                                 <td>{{ $item->satuan }}</td>
                                 <td>{{ $item->jumlah }}</td>
                                 <td>
-                                    <a class="btn btn-warning btn-sm"
-                                        href="{{ route('itemview', ['id' => $item->id]) }}">
+                                    <button class="btn btn-warning btn-sm" wire:click='goToView({{ $item->id }})'
+                                        title="Lihat Data">
                                         <i class="fa fa-eye d-inline d-md-none"></i>
                                         <span class="fw-bold d-none d-md-inline">Lihat</span>
-                                    </a>
+                                    </button>
                                     @if ($item->jumlah == 0)
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#deleteitem" wire:click='viewitem({{ $item->id }})'>
+                                            data-bs-target="#deleteitem" wire:click='viewitem({{ $item->id }})'
+                                            title="Hapus Data">
                                             <i class="fa fa-trash d-inline d-md-none"></i>
                                             <span class="fw-bold d-none d-md-inline">Hapus</span>
                                         </button>

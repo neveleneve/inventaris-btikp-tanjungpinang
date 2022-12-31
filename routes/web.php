@@ -28,12 +28,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('item', App\Http\Livewire\ItemAdministrator::class)
         ->name('item');
-
     Route::get('item/{id}', App\Http\Livewire\ItemViewAdministrator::class)
         ->name('itemview');
 
     Route::get('pengelolaan', App\Http\Livewire\PengelolaanAdministrator::class)
         ->name('pengelolaan');
+    Route::get('pengelolaan/add', App\Http\Livewire\AddPengelolaanAdministrator::class)
+        ->name('pengelolaanadd');
+    // Route::get('pengelolaan/{id}', App\Http\Livewire\PengelolaanViewAdministrator::class)
+    //     ->name('pengelolaanview');
 
     Route::get('report', App\Http\Livewire\ReportAdministrator::class)
         ->name('report');

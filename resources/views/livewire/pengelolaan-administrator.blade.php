@@ -15,7 +15,7 @@
                 wire:model='pencarian'>
         </div>
         <div class="col-12 col-md-6 d-grid gap-2 mb-3">
-            <button title="Tambah Data Item" class="btn btn-primary fw-bold">
+            <button title="Tambah Data Item" class="btn btn-primary fw-bold" wire:click='goToView("pengelolaanadd")'>
                 <i class="fa fa-file-circle-plus d-inline d-md-none"></i>
                 <span class="d-none d-md-inline">Tambah Data Pengelolaan</span>
             </button>
@@ -39,10 +39,11 @@
                                 <td>{{ $item->nama_penanggung_jawab }}</td>
                                 <td>
                                     <a href="#">
-                                        <a class="btn btn-warning btn-sm" href="#">
+                                        <button class="btn btn-warning btn-sm"
+                                            wire:click='goToView({{ $item->id }})'>
                                             <i class="fa fa-eye d-inline d-md-none"></i>
                                             <span class="fw-bold d-none d-md-inline">Lihat</span>
-                                        </a>
+                                        </button>
                                         <button class="btn btn-danger btn-sm">
                                             <i class="fa fa-trash d-inline d-md-none"></i>
                                             <span class="fw-bold d-none d-md-inline">Hapus</span>

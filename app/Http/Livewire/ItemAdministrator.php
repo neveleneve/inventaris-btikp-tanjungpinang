@@ -41,6 +41,11 @@ class ItemAdministrator extends Component
         });
     }
 
+    public function goToView($id)
+    {
+        return redirect(route('itemview', ['id' => $id]));
+    }
+
     public function render()
     {
         if ($this->pencarian == null || $this->pencarian == '') {
