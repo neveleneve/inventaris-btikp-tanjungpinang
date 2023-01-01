@@ -2,17 +2,29 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Item;
 use App\Models\MasterPengelolaan;
+use App\Models\TipePengelolaan;
 use Livewire\Component;
 
 class AddPengelolaanAdministrator extends Component
 {
+    public $datapengelolaan = [
+        'id' => '',
+        'nama' => ''
+    ];
+
+    public $itemlist;
+
+    public $itemselected;
+
+    public $tipepengelolaan;
+
     public function render()
     {
-        $id = $this->generateID();
-        return view('livewire.add-pengelolaan-administrator', [
-            'id' => $id
-        ])->extends('layouts.livewire');
+
+        return view('livewire.add-pengelolaan-administrator')
+            ->extends('layouts.livewire');
     }
 
     public function generateID()
@@ -30,7 +42,6 @@ class AddPengelolaanAdministrator extends Component
             }
             $id = 'PL-' . $idloop . ($jumlahdata + 1);
         }
-
         return $id;
     }
 
@@ -41,5 +52,16 @@ class AddPengelolaanAdministrator extends Component
         } else {
             return redirect(route($route, [$param]));
         }
+    }
+
+    public function mount()
+    {
+        $idpengelolaan = $this->generateID();
+        $itemlist = Item::get();
+        $jenispengelolaan = TipePengelolaan::get();
+
+        $this->datapengelolaan['id'] = $idpengelolaan;
+        $this->itemlist = $itemlist;
+        $this->tipepengelolaan = $jenispengelolaan;
     }
 }

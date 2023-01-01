@@ -35,6 +35,7 @@ class PengelolaanAdministrator extends Component
     {
         // 
     }
+    
     public function setPage($url)
     {
         $this->currentPage = explode('page=', $url)[1];
@@ -42,6 +43,7 @@ class PengelolaanAdministrator extends Component
             return $this->currentPage;
         });
     }
+
     public function mount()
     {
         $pengelolaan = MasterPengelolaan::orderBy('id')->get();
