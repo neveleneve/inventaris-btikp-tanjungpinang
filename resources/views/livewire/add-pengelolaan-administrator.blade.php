@@ -20,6 +20,7 @@
                         <pre>
                             @php
                                 print_r($datapengelolaan);
+                                print_r($checkboxselectedstate);
                             @endphp
                         </pre>
                     </div>
@@ -40,13 +41,15 @@
                                     @forelse ($itemlist as $item)
                                         <tr>
                                             <td>
-                                                <input type="checkbox" class="form-check">
+                                                <input type="checkbox" class="form-check"
+                                                    wire:click='checkedItem({{ $loop->index }})'>
                                             </td>
                                             <td>{{ $loop->index + 1 }}</td>
                                             <td>{{ $item->nama }}</td>
                                             <td>{{ $item->jumlah }}</td>
                                             <td>
-                                                <select name="tipe" id="tipe" class="form-select">
+                                                <select {{ $checkboxselectedstate[$loop->index]['enable'] }}
+                                                    name="tipe" id="tipe" class="form-select">
                                                     <option selected hidden>Pilih Jenis Pengelolaan</option>
                                                     @forelse ($tipepengelolaan as $item)
                                                         <option value="{{ $item->id }}">{{ $item->nama }}</option>
@@ -55,11 +58,16 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input type="number" name="jumlah" id="jumlah"
-                                                    class="form-control">
+                                                <input type="number" name="jumlah" id="jumlah" class="form-control"
+                                                    {{ $checkboxselectedstate[$loop->index]['enable'] }}>
                                             </td>
                                         </tr>
                                     @empty
+                                        <tr>
+                                            <td colspan="6">
+                                                <h3 class="text-center fw-bold">Data Kosong</h3>
+                                            </td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>

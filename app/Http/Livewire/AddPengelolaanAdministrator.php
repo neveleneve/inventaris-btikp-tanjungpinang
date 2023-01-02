@@ -18,11 +18,12 @@ class AddPengelolaanAdministrator extends Component
 
     public $itemselected;
 
+    public $checkboxselectedstate;
+
     public $tipepengelolaan;
 
     public function render()
     {
-
         return view('livewire.add-pengelolaan-administrator')
             ->extends('layouts.livewire');
     }
@@ -60,8 +61,30 @@ class AddPengelolaanAdministrator extends Component
         $itemlist = Item::get();
         $jenispengelolaan = TipePengelolaan::get();
 
+        $this->generateItemState();
         $this->datapengelolaan['id'] = $idpengelolaan;
         $this->itemlist = $itemlist;
         $this->tipepengelolaan = $jenispengelolaan;
+    }
+
+    public function generateItemState()
+    {
+        $itemlist = Item::get();
+        foreach ($itemlist as $key => $value) {
+            $this->checkboxselectedstate[$key] = [
+                'id' => $value['id'],
+                'enable' => 'disabled',
+            ];
+        }
+    }
+
+    public function checkedItem($index)
+    {
+        $state = $this->checkboxselectedstate[$index]['enable'];
+        if ($state == null) {
+            $this->checkboxselectedstate[$index]['enable'] = 'disabled';
+        } else {
+            $this->checkboxselectedstate[$index]['enable'] = null;
+        }
     }
 }
