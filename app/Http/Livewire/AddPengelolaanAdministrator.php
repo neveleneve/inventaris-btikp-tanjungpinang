@@ -16,7 +16,7 @@ class AddPengelolaanAdministrator extends Component
 
     public $itemlist;
 
-    public $itemselected;
+    public $itemselected = [];
 
     public $checkboxselectedstate;
 
@@ -58,6 +58,7 @@ class AddPengelolaanAdministrator extends Component
     public function mount()
     {
         $idpengelolaan = $this->generateID();
+        // $itemlist = Item::where('jumlah', '<>', 0)->get();
         $itemlist = Item::get();
         $jenispengelolaan = TipePengelolaan::get();
 
@@ -69,22 +70,29 @@ class AddPengelolaanAdministrator extends Component
 
     public function generateItemState()
     {
+        // $itemlist = Item::where('jumlah', '<>', 0)->get();
         $itemlist = Item::get();
         foreach ($itemlist as $key => $value) {
             $this->checkboxselectedstate[$key] = [
                 'id' => $value['id'],
-                'enable' => 'disabled',
+                'enable' => 0,
             ];
         }
     }
 
-    public function checkedItem($index)
+    public function checkedItem($index, $id)
     {
         $state = $this->checkboxselectedstate[$index]['enable'];
-        if ($state == null) {
-            $this->checkboxselectedstate[$index]['enable'] = 'disabled';
+        if ($state == 1) {
+            $this->checkboxselectedstate[$index]['enable'] = 0;
+            unset($this->itemselected[$index]);
         } else {
-            $this->checkboxselectedstate[$index]['enable'] = null;
+            $this->itemselected[$index] = [
+                'id' => $id,
+                'jenis' => 0,
+                'jumlah' => 0,
+            ];
+            $this->checkboxselectedstate[$index]['enable'] = 1;
         }
     }
 }
