@@ -22,8 +22,11 @@ class AddPengelolaanAdministrator extends Component
 
     public $tipepengelolaan;
 
+    public $search;
+
     public function render()
     {
+        $this->itemGenerate($this->search);
         return view('livewire.add-pengelolaan-administrator')
             ->extends('layouts.livewire');
     }
@@ -58,41 +61,48 @@ class AddPengelolaanAdministrator extends Component
     public function mount()
     {
         $idpengelolaan = $this->generateID();
-        // $itemlist = Item::where('jumlah', '<>', 0)->get();
-        $itemlist = Item::get();
+
         $jenispengelolaan = TipePengelolaan::get();
 
         $this->generateItemState();
         $this->datapengelolaan['id'] = $idpengelolaan;
-        $this->itemlist = $itemlist;
         $this->tipepengelolaan = $jenispengelolaan;
     }
 
     public function generateItemState()
     {
-        // $itemlist = Item::where('jumlah', '<>', 0)->get();
         $itemlist = Item::get();
-        foreach ($itemlist as $key => $value) {
-            $this->checkboxselectedstate[$key] = [
-                'id' => $value['id'],
+        foreach ($itemlist as $value) {
+            $this->checkboxselectedstate[$value['id']] = [
                 'enable' => 0,
             ];
         }
     }
 
-    public function checkedItem($index, $id)
+    public function checkedItem($id)
     {
-        $state = $this->checkboxselectedstate[$index]['enable'];
+        $state = $this->checkboxselectedstate[$id]['enable'];
         if ($state == 1) {
-            $this->checkboxselectedstate[$index]['enable'] = 0;
-            unset($this->itemselected[$index]);
+            $this->checkboxselectedstate[$id]['enable'] = 0;
+            unset($this->itemselected[$id]);
         } else {
-            $this->itemselected[$index] = [
+            $getdata = Item::where('id', $id)->get();
+            $this->itemselected[$id] = [
                 'id' => $id,
+                'nama' => $getdata[0]['nama'],
                 'jenis' => 0,
                 'jumlah' => 0,
             ];
-            $this->checkboxselectedstate[$index]['enable'] = 1;
+            $this->checkboxselectedstate[$id]['enable'] = 1;
+        }
+    }
+
+    public function itemGenerate($search = null)
+    {
+        if ($search != null || $search != '') {
+            $this->itemlist = Item::where('nama', 'LIKE', '%' . $search . '%')->get();
+        } else {
+            $this->itemlist = Item::get();
         }
     }
 }

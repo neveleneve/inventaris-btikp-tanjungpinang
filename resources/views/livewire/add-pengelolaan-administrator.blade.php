@@ -2,8 +2,8 @@
     @push('blade')
         @include('layouts.usernav')
     @endpush
-    <div class="row justify-content-center mb-3">
-        <div class="col-12 col-md-8">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-4 mb-3 mb-md-0">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-12 d-grid gap-2">
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary fw-bold">
                                 Simpan
                             </button>
                         </div>
@@ -35,64 +35,82 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row justify-content-center mb-3">
         <div class="col-12 col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <table class="table table-bordered text-center">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>No</th>
-                                <th>Nama</th>
-                                <th>Tersedia</th>
-                                <th>Jenis Pengelolaan</th>
-                                <th>Jumlah Pengelolaan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($itemlist as $item)
-                                @php
-                                    $jumlahitem = $item->jumlah;
-                                @endphp
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <input type="text" class="form-control" placeholder="Pencarian" wire:model='search'>
+                        </div>
+                    </div>
+                    <div class="table-responsive" style="height: 200px">
+                        <table class="table table-bordered text-center text-nowrap">
+                            <thead style="position: sticky; top: 0;" class="table-primary">
                                 <tr>
-                                    <td>
-                                        <input type="checkbox" class="form-check"
-                                            wire:click='checkedItem({{ $loop->index }}, {{ $item->id }})'>
-                                    </td>
-                                    <td>{{ $loop->index + 1 }}</td>
-                                    <td>{{ $item->nama }}</td>
-                                    <td>{{ $item->jumlah }}</td>
-                                    <td>
-                                        <select class="form-select" wire:model='itemselected.{{ $loop->index }}.jenis'
-                                            wire:change=''
-                                            {{ $checkboxselectedstate[$loop->index]['enable'] == 0 ? 'disabled' : null }}>
-                                            <option selected hidden value="0">Pilih Jenis Pengelolaan
-                                            </option>
-                                            @foreach ($tipepengelolaan as $item)
-                                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control" min="0"
-                                            {{ isset($itemselected[$loop->index]['jenis']) ? ($itemselected[$loop->index]['jenis'] == 1 ? null : "max=$jumlahitem") : null }}
-                                            wire:model='itemselected.{{ $loop->index }}.jumlah'
-                                            {{ $checkboxselectedstate[$loop->index]['enable'] == 0 ? 'disabled' : null }}>
-                                    </td>
+                                    <th></th>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Tersedia</th>
+                                    <th>Jenis Pengelolaan</th>
+                                    <th>Jumlah Pengelolaan</th>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6">
-                                        <h3 class="text-center fw-bold">Data Kosong</h3>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @forelse ($itemlist as $item)
+                                    @php
+                                        $jumlahitem = $item->jumlah;
+                                        $iditem = $item->id;
+                                    @endphp
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" class="form-check"
+                                                {{ $checkboxselectedstate[$item->id]['enable'] == 1 ? 'checked' : null }}
+                                                wire:click='checkedItem({{ $item->id }})'>
+                                        </td>
+                                        <td>{{ $loop->index + 1 }}</td>
+                                        <td>{{ $item->nama }}</td>
+                                        <td>{{ $item->jumlah }}</td>
+                                        <td>
+                                            <select class="form-select"
+                                                wire:model='itemselected.{{ $item->id }}.jenis'
+                                                {{ $checkboxselectedstate[$item->id]['enable'] == 0 ? 'disabled' : null }}>
+                                                <option selected hidden value="0">Pilih Jenis Pengelolaan
+                                                </option>
+                                                @foreach ($tipepengelolaan as $item)
+                                                    @if ($jumlahitem == 0)
+                                                        @if ($item->id == 1)
+                                                            <option value="{{ $item->id }}">{{ $item->nama }}
+                                                            </option>
+                                                        @endif
+                                                    @else
+                                                        <option value="{{ $item->id }}">{{ $item->nama }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" min="0"
+                                                {{ isset($itemselected[$iditem]['jenis']) ? ($itemselected[$iditem]['jenis'] == 1 ? null : "max=$jumlahitem") : null }}
+                                                wire:model='itemselected.{{ $iditem }}.jumlah'
+                                                {{ $checkboxselectedstate[$iditem]['enable'] == 0 ? 'disabled' : null }}>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6">
+                                            <h3 class="text-center fw-bold">Data Kosong</h3>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row justify-content-center mb-3">
+
     </div>
 </div>
