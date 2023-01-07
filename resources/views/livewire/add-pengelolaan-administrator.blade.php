@@ -13,9 +13,9 @@
                                 wire:model='datapengelolaan.id' readonly>
                         </div>
                         <div class="col-12 mb-3">
-                            <label for="id" class="fw-bold">Nama Penanggung Jawab</label>
+                            <label for="id" class="fw-bold">Penanggung Jawab</label>
                             <input type="text" class="form-control" id="nama" name="nama"
-                                wire:model='datapengelolaan.nama'>
+                                wire:model='datapengelolaan.nama' placeholder="Nama Penanggung Jawab">
                         </div>
                         {{-- <pre>
                             @php
@@ -43,7 +43,7 @@
                             <input type="text" class="form-control" placeholder="Pencarian" wire:model='search'>
                         </div>
                     </div>
-                    <div class="table-responsive" style="height: 200px">
+                    <div class="table-responsive" style="height: 155px">
                         <table class="table table-bordered text-center text-nowrap">
                             <thead style="position: sticky; top: 0;" class="table-primary">
                                 <tr>
