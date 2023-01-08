@@ -36,7 +36,7 @@
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>{{ $item->id_pengelolaan }}</td>
-                                <td>{{ $item->nama_penanggung_jawab }}</td>
+                                <td>{{ ucwords($item->nama_penanggung_jawab) }}</td>
                                 <td>
                                     <a href="#">
                                         <button class="btn btn-warning btn-sm"

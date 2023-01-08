@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Item;
 use App\Models\MasterPengelolaan;
+use App\Models\Pengelolaan;
 use App\Models\TipePengelolaan;
 use Livewire\Component;
 
@@ -24,7 +25,7 @@ class AddPengelolaanAdministrator extends Component
 
   public $search;
 
-  public $errorinput = [
+  public $inputerror = [
     'nama' => '',
     'item' => '',
   ];
@@ -111,8 +112,76 @@ class AddPengelolaanAdministrator extends Component
     }
   }
 
+  public function kembali()
+  {
+    return redirect(route('pengelolaan'));
+  }
+
+  public function jenisPengelolaan($id)
+  {
+    $nama = '';
+    if ($id == 0) {
+      $nama = 'Belum dipilih';
+    } else {
+      $jenis = TipePengelolaan::where('id', $id)->get();
+      $nama = $jenis[0]['nama'];
+    }
+    return $nama;
+  }
+
   public function store()
   {
     // cek master
+    if ($this->datapengelolaan['nama'] == null || $this->datapengelolaan['nama'] == '') {
+      $this->inputerror['nama'] = 0;
+    } else {
+      $this->inputerror['nama'] = 1;
+    }
+
+    // cek item
+    if (count($this->itemselected) > 0) {
+      foreach ($this->itemselected as $value) {
+        if ($value['jenis'] == 0 || $value['jumlah'] == 0) {
+          $this->inputerror['item'] = 0;
+          break;
+        } else {
+          $this->inputerror['item'] = 1;
+        }
+      }
+    } else {
+      $this->inputerror['item'] = 0;
+    }
+
+    if ($this->inputerror['nama'] == 1 && $this->inputerror['item'] == 1) {
+      $idpengelolaan = $this->datapengelolaan['id'];
+      MasterPengelolaan::insert([
+        'id_pengelolaan' => $idpengelolaan,
+        'nama_penanggung_jawab' => $this->datapengelolaan['nama'],
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s'),
+      ]);
+
+      foreach ($this->itemselected as $value) {
+        $jenispengelolaan = TipePengelolaan::where('id', $value['jenis'])->get();
+        $tipe = $jenispengelolaan[0]['tipe'];
+        if ($tipe == '+') {
+          Item::where('id', $value['id'])->increment('jumlah', $value['jumlah']);
+        } elseif ($tipe == '-') {
+          Item::where('id', $value['id'])->decrement('jumlah', $value['jumlah']);
+        }
+        Pengelolaan::insert([
+          'id_pengelolaan' => $idpengelolaan,
+          'id_item' => $value['id'],
+          'id_tipe_pengelolaan' => $value['jenis'],
+          'jumlah' => $value['jumlah'],
+          'created_at' => date('Y-m-d H:i:s'),
+          'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+      }
+      return redirect(route('pengelolaan'))->with([
+        'message' => 'Berhasil menambah data pengelolaan',
+        'color' => 'success',
+      ]);
+    }
   }
 }

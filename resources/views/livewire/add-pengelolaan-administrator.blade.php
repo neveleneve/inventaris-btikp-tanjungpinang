@@ -3,7 +3,7 @@
         @include('layouts.usernav')
     @endpush
     <div class="row justify-content-center mb-3">
-        <div class="col-12 col-md-4 mb-3 mb-md-0">
+        <div class="col-12 col-lg-4 mb-3 mb-lg-0">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -17,11 +17,11 @@
                             <input type="text" class="form-control" id="nama" name="nama"
                                 wire:model='datapengelolaan.nama' placeholder="Nama Penanggung Jawab">
                             @if ($inputerror['nama'] == '0')
-                                <small class="text-danger">Lengkapi data penanggung jawab pengelolaan</small>
+                                <small class="text-danger fw-bold">Lengkapi data penanggung jawab pengelolaan</small>
                             @endif
                         </div>
                     </div>
-                    <div class="row mb-3 d-block d-md-none">
+                    <div class="row mb-3 d-block d-lg-none">
                         <div class="col-12">
                             <table class="table table-bordered text-center text-nowrap">
                                 <thead class="table-primary">
@@ -72,7 +72,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-lg-8">
             <div class="card">
                 <div class="card-body">
                     <h3 class="text-center fw-bold">Data Barang</h3>
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                     @if ($inputerror['item'] == '0')
-                        <small class="text-danger text-center">Lengkapi data pengelolaan barang</small>
+                        <small class="text-danger fw-bold">Lengkapi data pengelolaan barang</small>
                     @endif
                     <div class="table-responsive" style="height: 155px">
                         <table class="table table-bordered text-center text-nowrap">
@@ -151,7 +151,7 @@
             </div>
         </div>
     </div>
-    <div class="row d-none d-md-block">
+    <div class="row d-none d-lg-block">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">

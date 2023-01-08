@@ -55,7 +55,7 @@ class ItemAdministrator extends Component
                     'items.*',
                     'jenis_items.nama as jenis'
                 ])
-                ->orderBy('items.created_at')
+                // ->orderBy('items.created_at')
                 ->paginate(10);
         } else {
             $data = DB::table('items')
@@ -65,7 +65,7 @@ class ItemAdministrator extends Component
                     'jenis_items.nama as jenis'
                 ])
                 ->where('items.nama', 'LIKE', '%' . $this->pencarian . '%')
-                ->orderBy('items.created_at')
+                // ->orderBy('items.created_at')
                 ->paginate(10);
         }
         $jenisitem = JenisItem::get();
