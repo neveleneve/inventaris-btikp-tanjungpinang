@@ -2,7 +2,7 @@
     @push('blade')
         @include('layouts.usernav')
     @endpush
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mb-3">
         <div class="col-12 col-md-4 mb-3 mb-md-0">
             <div class="card">
                 <div class="card-body">
@@ -16,19 +16,56 @@
                             <label for="id" class="fw-bold">Penanggung Jawab</label>
                             <input type="text" class="form-control" id="nama" name="nama"
                                 wire:model='datapengelolaan.nama' placeholder="Nama Penanggung Jawab">
+                            @if ($inputerror['nama'] == '0')
+                                <small class="text-danger">Lengkapi data penanggung jawab pengelolaan</small>
+                            @endif
                         </div>
-                        {{-- <pre>
-                            @php
-                                // print_r($datapengelolaan);
-                                // print_r($checkboxselectedstate);
-                                print_r($itemselected);
-                            @endphp
-                        </pre> --}}
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-12 d-grid gap-2">
-                            <button class="btn btn-primary fw-bold">
+                    <div class="row mb-3 d-block d-md-none">
+                        <div class="col-12">
+                            <table class="table table-bordered text-center text-nowrap">
+                                <thead class="table-primary">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Item</th>
+                                        <th>Jenis Pengelolaan</th>
+                                        <th>Jumlah</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($itemselected as $item)
+                                        <tr>
+                                            <td>{{ $loop->index + 1 }}</td>
+                                            <td>{{ ucwords($item['nama']) }}</td>
+                                            <td>{{ $this->jenisPengelolaan($item['jenis']) }}</td>
+                                            <td>{{ $item['jumlah'] }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4">
+                                                <h3 class="text-center fw-bold">Data Kosong</h3>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {{-- <pre>
+                        @php
+                            print_r($itemselected);
+                            print_r($inputerror);
+                        @endphp
+                    </pre> --}}
+                    <div class="row mb-1">
+                        <div class="col-12 d-grid gap-2 mb-3">
+                            <button class="btn btn-primary fw-bold" wire:click='store'>
                                 Simpan
+                            </button>
+                        </div>
+                        <div class="col-12 d-grid gap-2">
+                            <button class="btn btn-danger fw-bold" wire:click='kembali'>
+                                Kembali
                             </button>
                         </div>
                     </div>
@@ -38,11 +75,15 @@
         <div class="col-12 col-md-8">
             <div class="card">
                 <div class="card-body">
+                    <h3 class="text-center fw-bold">Data Barang</h3>
                     <div class="row mb-3">
                         <div class="col-12">
                             <input type="text" class="form-control" placeholder="Pencarian" wire:model='search'>
                         </div>
                     </div>
+                    @if ($inputerror['item'] == '0')
+                        <small class="text-danger text-center">Lengkapi data pengelolaan barang</small>
+                    @endif
                     <div class="table-responsive" style="height: 155px">
                         <table class="table table-bordered text-center text-nowrap">
                             <thead style="position: sticky; top: 0;" class="table-primary">
@@ -68,7 +109,7 @@
                                                 wire:click='checkedItem({{ $item->id }})'>
                                         </td>
                                         <td>{{ $loop->index + 1 }}</td>
-                                        <td>{{ $item->nama }}</td>
+                                        <td>{{ ucwords($item->nama) }}</td>
                                         <td>{{ $item->jumlah }}</td>
                                         <td>
                                             <select class="form-select"
@@ -110,7 +151,39 @@
             </div>
         </div>
     </div>
-    <div class="row justify-content-center mb-3">
-
+    <div class="row d-none d-md-block">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="text-center fw-bold">Data Barang Pengelolaan</h3>
+                    <table class="table table-bordered text-center text-nowrap">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Item</th>
+                                <th>Jenis Pengelolaan</th>
+                                <th>Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($itemselected as $item)
+                                <tr>
+                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>{{ ucwords($item['nama']) }}</td>
+                                    <td>{{ $this->jenisPengelolaan($item['jenis']) }}</td>
+                                    <td>{{ $item['jumlah'] }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4">
+                                        <h3 class="text-center fw-bold">Data Kosong</h3>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
