@@ -38,17 +38,20 @@
                                 <td>{{ $item->id_pengelolaan }}</td>
                                 <td>{{ ucwords($item->nama_penanggung_jawab) }}</td>
                                 <td>
-                                    <a href="#">
-                                        <button class="btn btn-warning btn-sm"
-                                            wire:click='goToView({{ $item->id }})'>
-                                            <i class="fa fa-eye d-inline d-md-none"></i>
-                                            <span class="fw-bold d-none d-md-inline">Lihat</span>
-                                        </button>
-                                        <button class="btn btn-danger btn-sm">
-                                            <i class="fa fa-trash d-inline d-md-none"></i>
-                                            <span class="fw-bold d-none d-md-inline">Hapus</span>
-                                        </button>
-                                    </a>
+                                    <button class="btn btn-warning btn-sm"
+                                        wire:click='goToView("pengelolaanview",{{ $item->id }})'>
+                                        <i class="fa fa-eye d-inline d-md-none"></i>
+                                        <span class="fw-bold d-none d-md-inline">Lihat</span>
+                                    </button>
+                                    <button class="btn btn-info btn-sm">
+                                        <i class="fa fa-print d-inline d-md-none"></i>
+                                        <span class="fw-bold d-none d-md-inline">Cetak</span>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#deleteitem" wire:click='selectitem({{ $item->id }})'>
+                                        <i class="fa fa-trash d-inline d-md-none"></i>
+                                        <span class="fw-bold d-none d-md-inline">Hapus</span>
+                                    </button>
                                 </td>
                             </tr>
                         @empty
@@ -63,4 +66,38 @@
             </div>
         </div>
     </div>
+    <div wire:ignore.self class="modal fade" id="deleteitem" tabindex="-1" data-bs-backdrop="static">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 fw-bold" id="exampleModalToggleLabel2">Hapus Item</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Hapus data pengelolaan {{ $selectdeleted['nama'] }}?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" wire:click='cleartext' class="btn btn-danger" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        wire:click='delete({{ $selectdeleted['id'] }}); cleartext'>
+                        Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- additional script --}}
+    @push('js')
+        <script>
+            $(document).ready(function() {
+                window.livewire.on('alertremove', () => {
+                    setTimeout(function() {
+                        $('.alert').fadeOut('fast');
+                    }, 3000);
+                });
+            });
+        </script>
+    @endpush
 </div>

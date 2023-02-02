@@ -1,12 +1,7 @@
 <div>
     <div class="row mb-3">
         <div class="col-3 col-md-2 offset-0 offset-md-2 d-grid gap-2">
-            <a class="btn btn-danger fw-bold" href="{{ route('item') }}">
-                <i class="fa fa-chevron-left d-inline d-md-none"></i>
-                <span class="d-none d-md-inline">
-                    Kembali
-                </span>
-            </a>
+
         </div>
     </div>
     <div class="row justify-content-center mb-3">
@@ -49,8 +44,14 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-12 form-group d-grid gap-2 text-center mb-3">
-                            <button class="btn btn-primary fw-bold" wire:click='update'>Ubah Data</button>
+                        <div class="col-12 form-group d-grid text-center">
+                            <button class="btn btn-primary fw-bold mb-3" wire:click='update'>Ubah Data</button>
+                            <a class="btn btn-danger fw-bold" href="{{ route('item') }}">
+                                <i class="fa fa-chevron-left d-inline d-md-none"></i>
+                                <span class="d-none d-md-inline">
+                                    Kembali
+                                </span>
+                            </a>
                         </div>
                         {{-- <pre>
                             @php
