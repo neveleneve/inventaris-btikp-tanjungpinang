@@ -21,21 +21,18 @@ class ReportAdministrator extends Component
         'November',
         'Desember',
     ];
-
     public $state = [
         'jenis' => 0,
         'jangka' => 0,
         'bulan' => 0,
         'tahun' => 0,
     ];
-
     public $statecheck = [
         'jenis' => 0,
         'jangka' => 0,
         'bulan' => 0,
         'tahun' => 0,
     ];
-
     public function render()
     {
         $this->buttonstate();
@@ -52,13 +49,11 @@ class ReportAdministrator extends Component
         } else {
             $this->statecheck['jenis'] = 1;
         }
-
         if ($this->state['jangka'] == 0) {
             $this->statecheck['jangka'] = 0;
         } else {
             $this->statecheck['jangka'] = 1;
         }
-
         if ($this->state['jangka'] == 2) {
             $this->statecheck['bulan'] = 1;
         } else {
@@ -68,11 +63,20 @@ class ReportAdministrator extends Component
                 $this->statecheck['bulan'] = 1;
             }
         }
-
         if ($this->state['tahun'] == 0) {
             $this->statecheck['tahun'] = 0;
         } else {
             $this->statecheck['tahun'] = 1;
         }
+        if (array_sum($this->statecheck) != 4) {
+            return 'disabled';
+        } else {
+            return null;
+        }
+    }
+
+    public function cetak()
+    {
+        $this->emit('cetak', $this->state);
     }
 }

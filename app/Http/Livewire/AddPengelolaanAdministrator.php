@@ -137,7 +137,6 @@ class AddPengelolaanAdministrator extends Component
     } else {
       $this->inputerror['nama'] = 1;
     }
-
     // cek item
     if (count($this->itemselected) > 0) {
       foreach ($this->itemselected as $value) {
@@ -151,7 +150,6 @@ class AddPengelolaanAdministrator extends Component
     } else {
       $this->inputerror['item'] = 0;
     }
-
     if ($this->inputerror['nama'] == 1 && $this->inputerror['item'] == 1) {
       $idpengelolaan = $this->datapengelolaan['id'];
       MasterPengelolaan::insert([
@@ -160,7 +158,6 @@ class AddPengelolaanAdministrator extends Component
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' => date('Y-m-d H:i:s'),
       ]);
-
       foreach ($this->itemselected as $value) {
         $jenispengelolaan = TipePengelolaan::where('id', $value['jenis'])->get();
         $tipe = $jenispengelolaan[0]['tipe'];
@@ -178,6 +175,7 @@ class AddPengelolaanAdministrator extends Component
           'updated_at' => date('Y-m-d H:i:s'),
         ]);
       }
+      $this->emit('cetak', $idpengelolaan);
       return redirect(route('pengelolaan'))->with([
         'message' => 'Berhasil menambah data pengelolaan',
         'color' => 'success',

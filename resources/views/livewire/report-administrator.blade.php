@@ -2,11 +2,6 @@
     @push('blade')
         @include('layouts.usernav')
     @endpush
-    {{-- <pre>
-        {{ var_dump($state) }}
-        {{ var_dump($statecheck) }}
-    </pre> --}}
-    {{ $this->buttonstate() }}
     <div class="row justify-content-center">
         <div class="col-12 col-md-8">
             <div class="card">
@@ -45,10 +40,51 @@
                         @endfor
                     </select>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary fw-bold">Cetak Laporan</button>
+                        <button class="btn btn-primary fw-bold" wire:click='cetak' {{ $this->buttonstate() }}>Cetak
+                            Laporan</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    @push('js')
+        <script>
+            Livewire.on('cetak', (data) => {
+                // var url = "/report/cetak?jenis=";
+                // window.open(url, "_blank");
+                openWindowWithPost("{{ route('reportcetak') }}", {
+                    jenisx: data.jenis,
+                    jangkax: data.jangka,
+                    bulanx: data.bulan,
+                    tahunx: data.tahun,
+
+                });
+            });
+
+            function openWindowWithPost(url, data) {
+                var form = document.createElement("form");
+                form.target = "_blank";
+                form.method = "POST";
+                form.action = url;
+                form.style.display = "none";
+
+                for (var key in data) {
+                    var input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = key;
+                    input.value = data[key];
+                    form.appendChild(input);
+                }
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "_token";
+                input.value = "{{ csrf_token() }}";
+                form.appendChild(input);
+
+                document.body.appendChild(form);
+                form.submit();
+                document.body.removeChild(form);
+            }
+        </script>
+    @endpush
 </div>

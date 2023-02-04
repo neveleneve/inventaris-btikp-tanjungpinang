@@ -1,7 +1,4 @@
 <div>
-    {{-- @push('blade')
-        @include('layouts.usernav')
-    @endpush --}}
     <div class="row justify-content-center mb-3">
         <div class="col-12 col-lg-4 mb-3 mb-lg-0">
             <div class="card">
@@ -186,4 +183,12 @@
             </div>
         </div>
     </div>
+    @push('js')
+        <script>
+            Livewire.on('cetak', (id) => {
+                var url = "/pengelolaan/cetak/" + id;
+                window.open(url, "_blank");
+            });
+        </script>
+    @endpush
 </div>

@@ -35,9 +35,13 @@ Route::middleware(['auth'])->group(function () {
         ->name('pengelolaan');
     Route::get('pengelolaan/add', App\Http\Livewire\AddPengelolaanAdministrator::class)
         ->name('pengelolaanadd');
+    Route::get('pengelolaan/cetak/{id}', [App\Http\Controllers\CetakPengelolaanController::class, 'cetak'])
+        ->name('pengelolaancetak');
     Route::get('pengelolaan/view/{id}', App\Http\Livewire\PengelolaanViewAdministrator::class)
         ->name('pengelolaanview');
 
     Route::get('report', App\Http\Livewire\ReportAdministrator::class)
         ->name('report');
+    Route::post('report/cetak', [App\Http\Controllers\CetakReportController::class, 'cetak'])
+        ->name('reportcetak');
 });

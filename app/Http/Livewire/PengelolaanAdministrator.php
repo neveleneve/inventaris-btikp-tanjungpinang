@@ -110,4 +110,10 @@ class PengelolaanAdministrator extends Component
             $this->emit($idname);
         }
     }
+
+    public function cetak($id)
+    {
+        $this->emit('cetak', $id);
+        // return redirect(route('pengelolaancetak', ['id' => $id]));
+    }
 }

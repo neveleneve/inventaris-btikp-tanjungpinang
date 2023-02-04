@@ -43,7 +43,8 @@
                                         <i class="fa fa-eye d-inline d-md-none"></i>
                                         <span class="fw-bold d-none d-md-inline">Lihat</span>
                                     </button>
-                                    <button class="btn btn-info btn-sm">
+                                    <button class="btn btn-info btn-sm"
+                                        wire:click='cetak("{{ $item->id_pengelolaan }}")' target="__blank">
                                         <i class="fa fa-print d-inline d-md-none"></i>
                                         <span class="fw-bold d-none d-md-inline">Cetak</span>
                                     </button>
@@ -96,6 +97,10 @@
                     setTimeout(function() {
                         $('.alert').fadeOut('fast');
                     }, 3000);
+                });
+                Livewire.on('cetak', (id) => {
+                    var url = "/pengelolaan/cetak/" + id;
+                    window.open(url, "_blank");
                 });
             });
         </script>
